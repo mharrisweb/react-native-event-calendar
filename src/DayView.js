@@ -85,7 +85,7 @@ export default class DayView extends React.PureComponent {
     return range(start, end + 1).map((i, index) => {
       let timeText;
       if (i === start) {
-        timeText = ``;
+         timeText = !format24h ? `${i} AM` : i;
       } else if (i < 12) {
         timeText = !format24h ? `${i} AM` : i;
       } else if (i === 12) {
@@ -99,7 +99,7 @@ export default class DayView extends React.PureComponent {
       return [
         <Text
           key={`timeLabel${i}`}
-          style={[styles.timeLabel, { top: offset * index - 6 }]}
+          style={[styles.timeLabel, { top: offset * index + 6 }]}
         >
           {timeText}
         </Text>,
