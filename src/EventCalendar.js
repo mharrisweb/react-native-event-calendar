@@ -87,7 +87,7 @@ export default class EventCalendar extends React.Component {
         events={item}
         width={width}
         styles={this.styles}
-        scrollToFirst={scrollToFirst}
+        scrollToFirst={true}
         start={start}
         end={end}
       />

@@ -23,14 +23,13 @@ export default class DayView extends React.PureComponent {
     this.calendarHeight = (props.end - props.start) * 100;
     const width = props.width - LEFT_MARGIN;
     const packedEvents = populateEvents(props.events, width, props.start);
-    let initPosition =
-      _.min(_.map(packedEvents, "top")) -
-      this.calendarHeight / (props.end - props.start);
-    initPosition = initPosition < 0 ? 0 : initPosition;
+
     this.state = {
-      _scrollY: initPosition,
+      _scrollY: 0,
       packedEvents
     };
+
+    this.scrollView = null;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -41,7 +40,7 @@ export default class DayView extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.props.scrollToFirst && this.scrollToFirst();
+    console.log("mounted");
   }
 
   scrollToFirst() {
@@ -56,21 +55,33 @@ export default class DayView extends React.PureComponent {
     }, 1);
   }
 
-  _renderRedLine() {
+  _findCurrentTime() {
     const offset = 100;
     const { format24h } = this.props;
     const { width, styles } = this.props;
     const timeNowHour = moment().hour();
     const timeNowMin = moment().minutes();
     return (
+      offset * (timeNowHour - this.props.start) + (offset * timeNowMin) / 60
+    );
+  }
+
+  _renderRedLine() {
+    const offset = 100;
+    const { format24h } = this.props;
+    const { width, styles } = this.props;
+    const timeNowHour = moment().hour();
+    const timeNowMin = moment().minutes();
+    let linePosition =
+      offset * (timeNowHour - this.props.start) + (offset * timeNowMin) / 60;
+    console.log(linePosition);
+    return (
       <View
         key={`timeNow`}
         style={[
           styles.lineNow,
           {
-            top:
-              offset * (timeNowHour - this.props.start) +
-              (offset * timeNowMin) / 60,
+            top: linePosition,
             width: width - 20
           }
         ]}
@@ -85,7 +96,7 @@ export default class DayView extends React.PureComponent {
     return range(start, end + 1).map((i, index) => {
       let timeText;
       if (i === start) {
-         timeText = !format24h ? `${i} AM` : i;
+        timeText = !format24h ? `${i} AM` : i;
       } else if (i < 12) {
         timeText = !format24h ? `${i} AM` : i;
       } else if (i === 12) {
@@ -154,7 +165,6 @@ export default class DayView extends React.PureComponent {
       const numberOfLines = Math.floor(event.height / TEXT_LINE_HEIGHT);
       const formatTime = this.props.format24h ? "HH:mm" : "hh:mm A";
 
-
       return (
         <View
           activeOpacity={0.5}
@@ -200,9 +210,21 @@ export default class DayView extends React.PureComponent {
 
   render() {
     const { styles } = this.props;
+    console.log(this.state);
+    let that = this;
+let scrollTo = that._findCurrentTime()
     return (
       <ScrollView
-        ref={ref => (this._scrollView = ref)}
+        ref={scrollView => {
+          if (scrollView !== null) {
+            this.scrollView = scrollView;
+            scrollView.scrollTo({
+              x: 0,
+              y: scrollTo,
+              animated: true
+            });
+          }
+        }}
         contentContainerStyle={[
           styles.contentStyle,
           { width: this.props.width }
