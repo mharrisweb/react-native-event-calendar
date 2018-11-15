@@ -24,6 +24,8 @@ export default class DayView extends React.PureComponent {
     const width = props.width - LEFT_MARGIN;
     const packedEvents = populateEvents(props.events, width, props.start);
 
+    this._findCurrentTime = this._findCurrentTime.bind(this);
+
     this.state = {
       _scrollY: 0,
       packedEvents
@@ -39,22 +41,6 @@ export default class DayView extends React.PureComponent {
     });
   }
 
-  componentDidMount() {
-    console.log("mounted");
-  }
-
-  scrollToFirst() {
-    setTimeout(() => {
-      if (this.state && this.state._scrollY && this._scrollView) {
-        this._scrollView.scrollTo({
-          x: 0,
-          y: this.state._scrollY,
-          animated: true
-        });
-      }
-    }, 1);
-  }
-
   _findCurrentTime() {
     const offset = 100;
     const { format24h } = this.props;
@@ -67,13 +53,9 @@ export default class DayView extends React.PureComponent {
   }
 
   _renderRedLine() {
-    const offset = 100;
-    const { format24h } = this.props;
     const { width, styles } = this.props;
-    const timeNowHour = moment().hour();
-    const timeNowMin = moment().minutes();
-    let linePosition =
-      offset * (timeNowHour - this.props.start) + (offset * timeNowMin) / 60;
+
+    let linePosition = this._findCurrentTime();
     console.log(linePosition);
     return (
       <View
@@ -211,8 +193,8 @@ export default class DayView extends React.PureComponent {
   render() {
     const { styles } = this.props;
     console.log(this.state);
-    let that = this;
-let scrollTo = that._findCurrentTime()
+
+    let scrollTo = this._findCurrentTime();
     return (
       <ScrollView
         ref={scrollView => {
