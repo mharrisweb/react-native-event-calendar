@@ -192,9 +192,9 @@ export default class DayView extends React.PureComponent {
 
   render() {
     const { styles } = this.props;
-    console.log(this.state);
-
+ 
     let scrollTo = this._findCurrentTime();
+    let scrollOffset = scrollTo > 300 ? scrollTo : 0;
     return (
       <ScrollView
         ref={scrollView => {
