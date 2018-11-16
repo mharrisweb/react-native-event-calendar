@@ -47,16 +47,15 @@ export default class DayView extends React.PureComponent {
     const { width, styles } = this.props;
     const timeNowHour = moment().hour();
     const timeNowMin = moment().minutes();
-    return (
-      offset * (timeNowHour - this.props.start) + (offset * timeNowMin) / 60
-    );
+    const val = offset * (timeNowHour - this.props.start) + (offset * timeNowMin) / 60
+    return val;
   }
 
   _renderRedLine() {
     const { width, styles } = this.props;
 
     let linePosition = this._findCurrentTime();
-    console.log(linePosition);
+
     return (
       <View
         key={`timeNow`}
@@ -191,10 +190,11 @@ export default class DayView extends React.PureComponent {
   }
 
   render() {
-    const { styles } = this.props;
- 
+    const { styles, end, start } = this.props;
+  
     let scrollTo = this._findCurrentTime();
-    let scrollOffset = scrollTo > 300 ? scrollTo : 0;
+    let scrollOffset = scrollTo < 560 ? 0 : scrollTo;
+
     return (
       <ScrollView
         ref={scrollView => {
