@@ -202,7 +202,7 @@ export default class DayView extends React.PureComponent {
             this.scrollView = scrollView;
             scrollView.scrollTo({
               x: 0,
-              y: scrollTo,
+              y: scrollOffset,
               animated: true
             });
           }
