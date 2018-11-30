@@ -237,9 +237,9 @@ export default class EventCalendar extends React.Component {
 
 const styles = StyleSheet.create({
   allDay: {
-    backgroundColor: "#006666",
+    backgroundColor: "#ffe6e6",
     fontSize: 12,
-    color: "white",
+    color: "black",
     borderRadius: 5,
     margin: 3,
     padding: 3
