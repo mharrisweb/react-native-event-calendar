@@ -4,6 +4,7 @@ import {
   View,
   TouchableOpacity,
   Image,
+  StyleSheet,
   Text
 } from "react-native";
 import _ from "lodash";
@@ -143,8 +144,8 @@ export default class EventCalendar extends React.Component {
   _allDayEvents(events) {
     return events.map((event, i) => {
       return (
-        <View key={i} style={{justifyContent: "center" }}>
-          <Text>{event.summary}</Text>
+        <View key={i} >
+          <Text style={styles.allDay}>{event.summary}</Text>
         </View>
       );
     });
@@ -233,3 +234,16 @@ export default class EventCalendar extends React.Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  allDay: {
+    backgroundColor: "#006666",
+    fontSize: 12,
+    color: "white",
+    borderRadius: 5,
+    margin: 3,
+    padding: 3
+  }
+});
+
+
